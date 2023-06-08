@@ -29,7 +29,7 @@ namespace WinformPoject0527
             InitializeComponent();
             _ProductId = productId;
             this.Load += BuyerAdd_Load;
-
+            numericUpDown1.Maximum = 10000000;
         }
 
         private void BuyerAdd_Load(object sender, EventArgs e)

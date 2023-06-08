@@ -24,6 +24,7 @@ namespace WinformPoject0527
             InitializeComponent();
             editproductID= _proid;
             this.Load += BuyerEdit_Load;
+            numericUpDown1.Maximum = 10000000;
         }
 
         private void BuyerEdit_Load(object sender, EventArgs e)
@@ -104,22 +105,48 @@ namespace WinformPoject0527
         {
             int quantityupdate = (int)numericUpDown1.Value;
 
-            
+
             //新增數量
-            var db=new AppDbContext();
-            var _cartDetailID=db.ShoppingCartDetails
-                                .Where(x=>x.ProductID== editproductID&&x.CartID==_cartIdBuyerEdit)
-                                .Select(x=>x.CartDetailID)
-                                .FirstOrDefault();
-            var dbupdate = db.ShoppingCartDetails.Find(_cartDetailID);
+            if (quantityupdate > 0)
+            {
+                var db = new AppDbContext();
+                var _cartDetailID = db.ShoppingCartDetails
+                                    .Where(x => x.ProductID == editproductID && x.CartID == _cartIdBuyerEdit)
+                                    .Select(x => x.CartDetailID)
+                                    .FirstOrDefault();
+                var dbupdate = db.ShoppingCartDetails.Find(_cartDetailID);
 
-            dbupdate.Quantity = quantityupdate;
+                dbupdate.Quantity = quantityupdate;
 
-            db.SaveChanges();
+                db.SaveChanges();
 
-            MessageBox.Show("商品已加入購物車。");
+                MessageBox.Show("商品已加入購物車。");
 
-            displaydatagridview();
+                displaydatagridview();
+            }
+            else
+            {
+                //刪除該筆ProductID的資料
+                var db = new AppDbContext();
+                var _cartDetailID = db.ShoppingCartDetails
+                                    .Where(x => x.ProductID == editproductID && x.CartID == _cartIdBuyerEdit)
+                                    .Select(x => x.CartDetailID)
+                                    .FirstOrDefault();
+                var dbremove = db.ShoppingCartDetails.Find(_cartDetailID);
+
+                if (dbremove == null)
+                {
+                    MessageBox.Show("record not found");
+                    return;
+                }
+                db.ShoppingCartDetails.Remove(dbremove);
+                db.SaveChanges();
+
+                MessageBox.Show("商品已從購物車刪除。");
+
+                displaydatagridview();
+            }
+
         }
     }
 }

@@ -43,17 +43,17 @@ namespace WinformPoject0527
             txtTotal.Text = result2.Where(x => x.ProductID == _ProductID).FirstOrDefault()?.StockQuantity.ToString();
 
             var result3 = db.Products.Where(x => x.ProductID == _ProductID).Select(x => x.ProductOpen).FirstOrDefault();
+            MessageBox.Show($"{result3}");
 
-            open = Convert.ToInt32(result3);
 
-            if (open == 1||open==default)
+            if (open==Convert.ToInt32(result3)||result3==default)
             {
                 open = 1;
                 btnOpen.Text = "商品上架";
                 btnOpen.BackColor = Color.Green;
                 btnOpen.ForeColor = Color.White;
             }
-            else
+            else 
             {
                 open = 0;
                 btnOpen.Text = "商品下架";

@@ -50,7 +50,7 @@ namespace WinformPoject0527
         {
             string varImageName = $"{id}"; // Your variable name
             string extension = ".jpg"; // The extension of your file
-            string targetPath = @"C:\Users\User\Desktop\WinformProject0607ver1.0-master\img";
+            string targetPath =Imglinksave();
             string fullPath = Path.Combine(targetPath, varImageName + extension);
             return fullPath;
         }
@@ -61,7 +61,7 @@ namespace WinformPoject0527
         /// <returns></returns>
         public static string Imglink0()
         {
-            return @"C:\Users\User\Desktop\WinformProject0607ver1.0-master\img\0.jpg";
+            return Imglinksave()+@"\0.jpg";
         }
 
         /// <summary>

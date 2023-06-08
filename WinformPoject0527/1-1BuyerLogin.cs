@@ -35,9 +35,9 @@ namespace WinformPoject0527
        
 
         private void buttonDemo_Click(object sender, EventArgs e)
-        {           
-            
-            textBoxaccount.Text = "Jason@123.com";
+        {
+
+            textBoxaccount.Text = "testtest@gmail.com";
             textBoxPw.Text = "1234";
         }
 
@@ -97,6 +97,10 @@ namespace WinformPoject0527
             frm.Show();
         }
 
-     
+        private void buttonDemoold_Click(object sender, EventArgs e)
+        {
+            textBoxaccount.Text = "Jason@123.com";
+            textBoxPw.Text = "1234";
+        }
     }
 }

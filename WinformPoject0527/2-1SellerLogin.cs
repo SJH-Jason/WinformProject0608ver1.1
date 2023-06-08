@@ -30,14 +30,9 @@ namespace WinformPoject0527
             password = textBoxPw.Text;
             try
             {
-                //List<int> SellerID = new List<int>();
                 var query1 = new AppDbContext().Sellers
                                             .Where(x => x.SellerAccount == account && x.SellerPassword == password)
                                             .Select(x => x.SellerID).FirstOrDefault();
-                //foreach (var item in query1)
-                //{
-                //    SellerID.Add(item);
-                //}
                 SellerIdlogin = query1;
 
                 //不用繞一圈 直接確認有沒有值 有值 等於SellerID 沒值等於default

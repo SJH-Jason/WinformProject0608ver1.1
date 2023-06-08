@@ -14,7 +14,7 @@ namespace WinformPoject0527
 {
     public partial class SellerShipmentsView : Form
     {
-        public int _SellerID = 10003;
+        public int _SellerID ;
         public SellerShipmentsView()
         {
             InitializeComponent();

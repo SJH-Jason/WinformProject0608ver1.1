@@ -44,10 +44,9 @@ namespace WinformPoject0527
 
             var result3 = db.Products.Where(x => x.ProductID == _ProductID).Select(x => x.ProductOpen).FirstOrDefault();
 
-            //MessageBox.Show($"{result3}");
             open = Convert.ToInt32(result3);
 
-            if (open == 1)
+            if (open == 1||open==default)
             {
                 open = 1;
                 btnOpen.Text = "商品上架";
@@ -73,7 +72,6 @@ namespace WinformPoject0527
                 string img0 = ImgLink.Imglink0();
                 pictureBoxShow.Image = new Bitmap(img0);
             }
-            ComboBoxItems();
         }
 
         public void ComboBoxItems()
@@ -88,12 +86,12 @@ namespace WinformPoject0527
         }
         public void ProductAddNew()
         {
-            //IQueryable<Product> query = new AppDbContext().Products.AsNoTracking();
-            //_ProductID = query.OrderByDescending(c => c.ProductID).Select(c => c.ProductID).FirstOrDefault();
-            //_SellerID = (int)query.OrderByDescending(c => c.ProductID).Select(c => c.SellerID).FirstOrDefault();
             txtProductId.Text = _ProductID.ToString();
             btnEdit.Enabled = false;
             btnOpen.Enabled = false;
+            btnDemo.Enabled = true;
+            ComboBoxItems();
+            comboBoxCategoryMain.SelectedIndex = 0;
 
         }
 
@@ -130,7 +128,12 @@ namespace WinformPoject0527
 
                 if (mainCategory != null)
                 {
-                    comboBoxCategoryMain.Text = mainCategory;
+                    ComboBoxItems();
+                    int index = comboBoxCategoryMain.Items.IndexOf(mainCategory);
+                    if (index != -1)
+                    {
+                        comboBoxCategoryMain.SelectedIndex = index;
+                    }
                 }
 
                 if (category != null)
@@ -144,7 +147,10 @@ namespace WinformPoject0527
         private void btnProductAdd_Click(object sender, EventArgs e)
         {
             if (txtProductName.Text == string.Empty ||
-               txtCategoryId.Text == string.Empty ||
+               comboBoxCategory.Text == string.Empty ||
+               comboBoxCategory.Text == "請選擇"||
+               comboBoxCategoryMain.Text == string.Empty ||
+               comboBoxCategoryMain.Text == "請選擇" ||
                txtProductPrice.Text == string.Empty ||
                txtProductDescription.Text == string.Empty)
 
@@ -156,14 +162,18 @@ namespace WinformPoject0527
             var db = new AppDbContext();
             int ProductId = Convert.ToInt32(txtProductId.Text);
             string name = txtProductName.Text;
-            string categoryId = txtCategoryId.Text;
+
+            var _category = db.ProductCategories.Where(x => x.CategoryName == comboBoxCategory.Text).Select(x => x.CategoryID).FirstOrDefault();
+            if (_category == default)
+            {
+                MessageBox.Show("請選擇正確分類!");
+                return;
+            }
+            string categoryId = _category;
+
             string description = txtProductDescription.Text;
             bool isInt = int.TryParse(txtProductPrice.Text, out int price);
             string _open = "1";
-            if (open == 0)
-            {
-                _open = "0";
-            }
 
             // 更新記錄
             var product = new Product()
@@ -217,11 +227,12 @@ namespace WinformPoject0527
                     // 儲存更改到資料庫
                     db.SaveChanges();
                 }
-
             }
 
             MessageBox.Show("已更新完成!");
+
             Close();
+
         }
         private void btnEdit_Click(object sender, EventArgs e)
         {
@@ -236,6 +247,11 @@ namespace WinformPoject0527
 
             var db = new AppDbContext();
             var _category=db.ProductCategories.Where(x=>x.CategoryName== comboBoxCategory.Text).Select(x=>x.CategoryID).FirstOrDefault();
+            if(_category==default)
+            {
+                MessageBox.Show("請選擇正確分類!");
+                return;
+            }
 
             var product = db.Products.Find(_ProductID);
             product.ProductName = txtProductName.Text;
@@ -405,7 +421,18 @@ namespace WinformPoject0527
                 {
                     comboBoxCategory.Items.Add(item);
                 }
+                comboBoxCategory.Text = "請選擇";
             }
+        }
+
+        private void btnDemo_Click(object sender, EventArgs e)
+        {
+            txtProductName.Text = "測試新品";
+            txtProductPrice.Text = "1500";
+            txtProductQuantity.Text = "10";
+            txtProductDescription.Text = "測試新商品!";
+            comboBoxCategoryMain.SelectedIndex = 0;
+            comboBoxCategory.SelectedIndex = 0;
         }
     }
 }

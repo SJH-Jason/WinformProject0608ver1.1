@@ -72,9 +72,6 @@ namespace WinformPoject0527
 
         public void DisplayView()
         {
-            //IQueryable<OrderDetail> query = new AppDbContext().OrderDetails.AsNoTracking();
-            //this.dataGridView1.DataSource = query.ToList();
-
             var db = new AppDbContext();
             var data = from o in db.OrderDetails
                        join p in db.Products
@@ -89,21 +86,6 @@ namespace WinformPoject0527
                            p.SellerID,
                        };
             this.dataGridView1.DataSource = data.Where(c => c.OrderID == _orderid && c.SellerID == _sellerid).ToList();
-
-            //var productQuantities = data
-            //                    .Where(c => c.OrderID == _orderid && c.SellerID == _sellerid)
-            //                    .GroupBy(x => x.ProductID)
-            //                    .ToDictionary(g => g.Key, g => g.Sum(x => x.Quantity));
-
-            //foreach (var item in productQuantities)
-            //{
-            //    MessageBox.Show($"ProductID: {item.Key}, Total Quantity: {item.Value}");
-
-            //    //var db2 = new AppDbContext();
-            //    //var data2 = db2.ProductsStocks.Find(item.Key);
-            //    //data2.QuantitySold += item.Value;
-            //    //data2.StockQuantity -= item.Value;
-            //}
 
         }
 
@@ -152,11 +134,9 @@ namespace WinformPoject0527
             //1=已出貨 
             //2=等候領取 物品領取鈕開啟
             //3=已領取 物品領取鈕按下/完成鈕開啟
-            //txtAction3.Text = "已取貨";
-            //btnCompletion.Enabled = true;
             //4=已結單 完成鈕按下
 
-            //原本應該為 等候中 物品送達後轉等候領取 確認領取後才會變為已領取 已領取狀態才會開啟按鈕進行確認
+            //等候中 物品送達後轉等候領取 確認領取後才會變為已領取 已領取狀態才會開啟按鈕進行確認
             txtAction3.Text = "已結單";
             btnCompletion.Enabled = false;
             txtTime4.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
@@ -190,7 +170,6 @@ namespace WinformPoject0527
             foreach (var item in productQuantities)
             {
                 //MessageBox.Show($"ProductID: {item.Key}, Total Quantity: {item.Value}");
-
                 var data2 = db.ProductsStocks.Find(item.Key);
                 //訂單數量扣除
                 data2.OrderQuantity -=item.Value; 

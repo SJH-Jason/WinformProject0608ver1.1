@@ -72,8 +72,8 @@ namespace WinformPoject0527
                                 .Where(x=>x.ProductID==_ProductId)
                                 .Sum(x => x.StockQuantity - x.OrderQuantity);
 
-            //如果購買數量<庫存可加入購物車
-            if (quantity< stockQuantity)
+            //如果購買數量<=庫存可加入購物車
+            if (quantity<= stockQuantity)
             {
                 //跳出加入購物車的messagebox之總價
                 if (numericUpDown1.Value == 0)

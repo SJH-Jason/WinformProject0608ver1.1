@@ -72,10 +72,34 @@ namespace WinformPoject0527
             var itempay=new AppDbContext().PaymentMethods
                                         .Where(x=>x.PaymentMethodName== pay)
                                         .Select(x=>x.PaymentMethodId).FirstOrDefault();
+            var verifyuser = new AppDbContext().Users
+                                            .Where(x => x.UserAccount == userAccount)
+                                            .Select(x => x.UserAccount).FirstOrDefault(); ;
 
             if (!IsValidEmail(userAccount))
             {
                 MessageBox.Show("請輸入有效的Email", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if ((string.IsNullOrEmpty(userAccount) ||
+                string.IsNullOrEmpty(userPassword) ||
+                string.IsNullOrEmpty(userName) ||
+                string.IsNullOrEmpty(gender) ||
+                string.IsNullOrEmpty(phone) ||
+                string.IsNullOrEmpty(cellphone) ||
+                string.IsNullOrEmpty(address) ||
+                string.IsNullOrEmpty(ship) ||
+                string.IsNullOrEmpty(pay)
+                ))
+            {
+                MessageBox.Show("欄位尚未填寫完整", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (verifyuser != null)
+            {
+                MessageBox.Show("此帳號已註冊", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -161,12 +185,22 @@ namespace WinformPoject0527
 
         private void buttonDemo_Click(object sender, EventArgs e)
         {
-            textBoxUserAccount.Text="Amy@gmail.com";
+            textBoxUserAccount.Text="testtest@gmail.com";
             textBoxUserPassword.Text="1234";
             textBoxUserName.Text= "Amy";
             textBoxPhone.Text="0225489762";
             textBoxCellPhone.Text="0965789412";
             textBoxAddress.Text="台北市大安區....";
+        }
+
+        private void buttonDemoFinish_Click(object sender, EventArgs e)
+        {
+            textBoxUserAccount.Text = "Amytest@gmail.com";
+            textBoxUserPassword.Text = "1234";
+            textBoxUserName.Text = "Amy";
+            textBoxPhone.Text = "0225489762";
+            textBoxCellPhone.Text = "0965789412";
+            textBoxAddress.Text = "台北市大安區....";
         }
     }
 }

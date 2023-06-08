@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -44,14 +45,6 @@ namespace WinformPoject0527
                 comboBox2.Items.Add(item);
             }
 
-            //var db = new AppDbContext().Sellers;
-            //txtAccount.Text=db.Where(c=>c.SellerID==_SellerID).Select(x=>x.SellerAccount).FirstOrDefault();
-            //txtPassword.Text = db.Where(c => c.SellerID == _SellerID).Select(x => x.SellerPassword).FirstOrDefault();
-            //txtName.Text = db.Where(c => c.SellerID == _SellerID).Select(x => x.SellerName).FirstOrDefault();
-            //txtSellerNo.Text = db.Where(c => c.SellerID == _SellerID).Select(x => x.SellerNumber).FirstOrDefault();
-            //txtPhone.Text = db.Where(c => c.SellerID == _SellerID).Select(x => x.SellerPhone).FirstOrDefault();
-            //txtAddress.Text = db.Where(c => c.SellerID == _SellerID).Select(x => x.SellerAddress).FirstOrDefault();
-
             var db2 = new AppDbContext();
             var sellers = db2.Sellers.Find(_SellerID);
             txtAccount.Text = sellers.SellerAccount.ToString();
@@ -62,10 +55,6 @@ namespace WinformPoject0527
             txtAddress.Text = sellers.SellerAddress;
             shipid = sellers.ShipID;
             payid = sellers.PayID;
-
-
-            //shipid = db.Where(c => c.SellerID == _SellerID).Select(x => x.ShipID).FirstOrDefault();
-            // payid= db.Where(c => c.SellerID == _SellerID).Select(x => x.PayID).FirstOrDefault();
 
             var shipidname = new AppDbContext().ShippingMethods.Where(c => c.ShippingMethodId == shipid).Select(x => x.ShippingMethodName).FirstOrDefault();
             var payidname = new AppDbContext().PaymentMethods.Where(c => c.PaymentMethodId == payid).Select(x => x.PaymentMethodName).FirstOrDefault();
@@ -82,7 +71,19 @@ namespace WinformPoject0527
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            //密碼補充設定
             string sellerpassword = txtPassword.Text;
+            if (sellerpassword.Length < 4)
+            {
+                MessageBox.Show("請至少輸入4碼密碼");
+                return;
+            }
+            else if (!Regex.IsMatch(sellerpassword, @"^[a-zA-Z0-9]+$"))
+            {
+                MessageBox.Show("密碼只能包含英文字母和數字");
+                return;
+            }
+
             string sellerphone = txtPhone.Text;
             string selleraddress = txtAddress.Text;
             string ship = comboBox1.Text;

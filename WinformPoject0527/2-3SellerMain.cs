@@ -60,10 +60,17 @@ namespace WinformPoject0527
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            var frm = new SellerRegisterEdit();
-            frm.MdiParent = Login.ActiveForm;
-            frm._SellerID = _SellerID;
-            frm.Show();
+            using (var formB = new SellerRegisterEdit())
+            {
+                formB.FormClosed += FormB_FormClosed;
+                formB._SellerID = _SellerID;
+                formB.ShowDialog();
+            }
+        }
+        private void FormB_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // Refresh the data in FormA here
+            Display();
         }
     }
 }

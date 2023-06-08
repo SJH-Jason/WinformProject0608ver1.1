@@ -43,7 +43,7 @@ namespace WinformPoject0527
             txtTotal.Text = result2.Where(x => x.ProductID == _ProductID).FirstOrDefault()?.StockQuantity.ToString();
 
             var result3 = db.Products.Where(x => x.ProductID == _ProductID).Select(x => x.ProductOpen).FirstOrDefault();
-            MessageBox.Show($"{result3}");
+            //MessageBox.Show($"{result3}");
 
 
             if (open==Convert.ToInt32(result3)||result3==default)

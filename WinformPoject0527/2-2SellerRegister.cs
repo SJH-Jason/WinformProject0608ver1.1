@@ -75,6 +75,29 @@ namespace WinformPoject0527
             var itemship = new AppDbContext().ShippingMethods.Where(x => x.ShippingMethodName == shipid).Select(x => x.ShippingMethodId).FirstOrDefault();
             var itempay = new AppDbContext().PaymentMethods.Where(x => x.PaymentMethodName == payid).Select(x => x.PaymentMethodId).FirstOrDefault();
 
+            //確認目前所有帳號
+            var dba=new AppDbContext();
+            var _account=dba.Sellers.Select(a=>a.SellerAccount).ToList();
+
+            foreach( var item in _account)
+            {
+                if (selleraccount == item)
+                {
+                    MessageBox.Show("該信箱已為用戶帳號，請用其他信箱申請新帳號，或嘗試登入帳號");
+                    return;
+                }
+            }
+
+            //確認目前所有統編
+            var _sellerid = dba.Sellers.Select(a => a.SellerNumber).ToList();
+            foreach( var item in _sellerid)
+            {
+                if (sellerid.ToString() == item)
+                {
+                    MessageBox.Show("該統編已使用，請用其他統編，或嘗試登入帳號");
+                    return;
+                }
+            }
 
             if (string.IsNullOrEmpty(sellerid.ToString()))
             {
@@ -118,19 +141,33 @@ namespace WinformPoject0527
                 PayID = itempay,
             };
             db.Sellers.Add(seller);
-            db.SaveChanges();
+            
             string register;
             register = $"帳號:{txtAccount.Text}\n公司名稱:{txtName.Text}\n統編:{txtId.Text}\n市話:{txtPhone.Text}\n地址:{txtContact.Text}{txtAddress.Text}\n出貨方式:{comboBox1.Text}\n收款方式:{comboBox2.Text}";
             DialogResult dr = MessageBox.Show(register, "註冊資訊是否正確?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
                 MessageBox.Show("註冊成功!", "註冊成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                db.SaveChanges();
             }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btnDemo_Click(object sender, EventArgs e)
+        {
+            txtAccount.Text="Yoona@123.com";
+            txtPassword.Text = "1234";
+            txtName.Text = "潤娥資訊會社";
+            txtId.Text = "55201314";
+            txtPhone.Text = "53203177";
+            txtContact.Text = "首爾市";
+            txtAddress.Text = "江南區";
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
         }
     }
 }

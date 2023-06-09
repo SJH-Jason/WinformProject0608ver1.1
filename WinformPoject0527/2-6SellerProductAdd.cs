@@ -65,7 +65,7 @@ namespace WinformPoject0527
             string fullPath = ImgLink.Imglink(_ProductID);
             if (File.Exists(fullPath))
             {
-                pictureBoxShow.Image = new Bitmap(fullPath);
+                pictureBoxShow.Image = new Bitmap(fullPath);              
             }
             else
             {
@@ -344,6 +344,7 @@ namespace WinformPoject0527
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
+
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 string varImageName = $"{_ProductID}"; // Your variable name
@@ -372,33 +373,50 @@ namespace WinformPoject0527
                     // Build the new file path with your variable name and the original extension
                     string newPath = Path.Combine(targetPath, varImageName + extension);
 
+                    if(File.Exists(newPath))
+                    {
+                        MessageBox.Show("請先刪除圖片!");
+                        pictureBoxShow.Image.Dispose();
+                        Close();
+                        return;
+                    }
+
                     // 複製檔案到指定的資料夾
                     File.Copy(filePath, newPath);
 
                     // 更新圖片控件以顯示新上傳的圖片
                     pictureBoxShow.Image = new Bitmap(newPath);
+                    pictureBoxShow.Image.Dispose();
+                    Close();
+                    return;
                 }
             }
         }
         private void btnimgDel_Click(object sender, EventArgs e)
         {
-            string fullPath = ImgLink.Imglink(_ProductID);
-
-            if (File.Exists(fullPath))
+            try
             {
-                if (pictureBoxShow.Image != null)
+                string fullPath = ImgLink.Imglink(_ProductID);
+
+                if (File.Exists(fullPath))
                 {
-                    pictureBoxShow.Image.Dispose(); // Dispose the current image
-                    pictureBoxShow.Image = null;
+                    if (pictureBoxShow.Image != null)
+                    {
+                        pictureBoxShow.Image.Dispose(); // Dispose the current image
+                        pictureBoxShow.Image = null;
+                    }
+                    File.Delete(fullPath);
+                    MessageBox.Show("圖片刪除成功!");
                 }
-                File.Delete(fullPath);
-                MessageBox.Show("圖片刪除成功!");
-            }
-            else
-            {
-                MessageBox.Show("查無圖片內容!");
-            }
+                else
+                {
+                    MessageBox.Show("查無圖片內容!");
+                }
 
+                pictureBoxShow.Image = new Bitmap(ImgLink.Imglink0());
+            }
+            catch (Exception ex)
+            { MessageBox.Show("123"); };
         }
 
         private void comboBoxCategoryMain_SelectedValueChanged(object sender, EventArgs e)
